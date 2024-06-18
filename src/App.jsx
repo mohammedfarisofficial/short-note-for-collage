@@ -3,6 +3,7 @@ import jsPDF from "jspdf";
 import { saveAs } from "file-saver";
 import * as pdfjsLib from "pdfjs-dist";
 import "pdfjs-dist/web/pdf_viewer.css";
+import "./App.css";
 
 // Configure the worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
@@ -298,10 +299,11 @@ const App = () => {
 
   return (
     <div className="container">
-      <h1>Create Your Bits</h1>
+      <h2>Short Note 🚀</h2>
       <form onSubmit={(e) => e.preventDefault()}>
-        <div>
+        <div className="inner-container">
           <input
+            className="file-selector"
             type="file"
             accept="application/pdf"
             onChange={handleFileChange}
@@ -310,7 +312,7 @@ const App = () => {
             Generate PDF
           </button>
           <button type="button" onClick={generatePDFDoubleSide}>
-            Generate PDF ( Double Side)
+            Generate PDF ( Double Side )
           </button>
         </div>
         {/* {bits.map((bit, index) => (
