@@ -29,10 +29,8 @@ const App = () => {
         return;
       }
 
-      updateProgress("Reading the PDF file...");
       const arrayBuffer = await pdfFile.arrayBuffer();
       const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-
       const doc = new jsPDF({
         orientation: "portrait",
         unit: "mm",
@@ -42,23 +40,22 @@ const App = () => {
       let pageCount = 1;
 
       for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-        updateProgress(`Processing page ${pageNumber} of ${pdf.numPages}...`);
         const page = await pdf.getPage(pageNumber);
         const pageWidth = 210; // A4 page width in mm
         const pageHeight = 297; // A4 page height in mm
         const gridWidth = pageWidth / 3; // Width of each grid cell
         const gridHeight = pageHeight / 3; // Height of each grid cell
 
-        const viewport = page.getViewport({ scale: .1 }); // Increase scale for higher quality
+        // Scale content to fit within each grid cell
+        const viewport = page.getViewport({ scale: 0.1 }); // Increase scale for higher quality
         const scale = Math.min(
           gridWidth / viewport.width,
           gridHeight / viewport.height
         );
-
         const scaledViewport = page.getViewport({ scale });
+
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
-
         canvas.height = scaledViewport.height;
         canvas.width = scaledViewport.width;
 
@@ -68,7 +65,6 @@ const App = () => {
         };
 
         await page.render(renderContext).promise;
-
         const imageData = canvas.toDataURL("image/jpeg", 1.0); // Convert canvas to JPEG image
 
         const col = (pageCount - 1) % 3; // Column index (0-2)
@@ -94,23 +90,17 @@ const App = () => {
           { align: "right" }
         );
         doc.setFontSize(3);
-          doc.text(
-            "_thefm",
-            item.xPos + 10,
-            item.yPos + gridHeight - 2,
-            { align: "left" }
-          );
-
-        if (pageCount % 9 === 0 && pageCount !== 0) {
-          // Add a new page after every 9 grid items
-          doc.addPage();
-          pageCount = 0; // Reset pageCount to start a new page
-        }
+        doc.text("_thefm", xPosition + 10, yPosition + gridHeight - 2, {
+          align: "left",
+        });
 
         pageCount++;
+
+        // Update progress message
+        const progressMessage = `Rendering page ${pageNumber} of ${pdf.numPages}`;
+        updateProgress(progressMessage);
       }
 
-      updateProgress("Saving the PDF file...");
       doc.save("gridPDF.pdf");
       updateProgress("PDF generation completed.");
     } catch (error) {
@@ -225,7 +215,7 @@ const App = () => {
         for (let item of renderDataPage1) {
           updateProgress(`Rendering page ${item.pageIndex} for first side...`);
           const page = await pdf.getPage(item.pageIndex);
-          const viewport = page.getViewport({ scale: .1 });
+          const viewport = page.getViewport({ scale: 0.1 });
           const scale = Math.min(
             gridWidth / viewport.width,
             gridHeight / viewport.height
@@ -261,12 +251,9 @@ const App = () => {
             { align: "right" }
           );
           doc.setFontSize(3);
-          doc.text(
-            "_thefm",
-            item.xPos + 10,
-            item.yPos + gridHeight - 2,
-            { align: "left" }
-          );
+          doc.text("_thefm", item.xPos + 10, item.yPos + gridHeight - 2, {
+            align: "left",
+          });
         }
 
         // Render the second page
@@ -274,7 +261,7 @@ const App = () => {
         for (let item of renderDataPage2) {
           updateProgress(`Rendering page ${item.pageIndex} for second side...`);
           const page = await pdf.getPage(item.pageIndex);
-          const viewport = page.getViewport({ scale: .1 });
+          const viewport = page.getViewport({ scale: 0.1 });
           const scale = Math.min(
             gridWidth / viewport.width,
             gridHeight / viewport.height
@@ -310,12 +297,9 @@ const App = () => {
             { align: "right" }
           );
           doc.setFontSize(3);
-          doc.text(
-            "_thefm",
-            item.xPos + 10,
-            item.yPos + gridHeight - 2,
-            { align: "left" }
-          );
+          doc.text("_thefm", item.xPos + 10, item.yPos + gridHeight - 2, {
+            align: "left",
+          });
         }
 
         // Move to the next set of grid items
@@ -361,7 +345,7 @@ const App = () => {
           </button>
         </div>
       </form>
-      <p>System Status: {isLoading ? `${progress}`: "Ready"}</p>
+      <p>System Status: {isLoading ? `${progress}` : "Ready"}</p>
     </div>
   );
 };
