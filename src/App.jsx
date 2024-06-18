@@ -124,7 +124,7 @@ const App = () => {
             Generate Grid PDF
           </button>
         </div>
-        {bits.map((bit, index) => (
+        {/* {bits.map((bit, index) => (
           <div key={index} className="bit">
             <h3>Bit {index + 1}</h3>
             <label>
@@ -145,10 +145,10 @@ const App = () => {
               />
             </label>
           </div>
-        ))}
-        <button type="button" onClick={addGrid}>
+        ))} */}
+        {/* <button type="button" onClick={addGrid}>
           Add Grid
-        </button>
+        </button> */}
       </form>
     </div>
   );
