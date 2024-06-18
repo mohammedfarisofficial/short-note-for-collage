@@ -106,6 +106,192 @@ const App = () => {
     doc.save("gridPDF.pdf");
   };
 
+  const generatePDFDoubleSide = async () => {
+    if (!pdfFile) {
+      alert("Please select a PDF file.");
+      return;
+    }
+
+    const arrayBuffer = await pdfFile.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+
+    const doc = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    const pageWidth = 210; // A4 page width in mm
+    const pageHeight = 297; // A4 page height in mm
+    const gridWidth = pageWidth / 3; // Width of each grid cell
+    const gridHeight = pageHeight / 3; // Height of each grid cell
+
+    let gridItemIndex = 0;
+
+    while (gridItemIndex * 18 < pdf.numPages) {
+      const renderDataPage1 = [];
+      const renderDataPage2 = [];
+
+      // Collect data for the first page
+      for (let i = 0; i < 3; i++) {
+        const index = gridItemIndex * 18 + 1 + i * 2;
+        if (index <= pdf.numPages) {
+          renderDataPage1.push({
+            pageIndex: index,
+            xPos: i * gridWidth,
+            yPos: 0,
+          });
+        }
+      }
+
+      for (let i = 0; i < 3; i++) {
+        const index = gridItemIndex * 18 + 7 + i * 2;
+        if (index <= pdf.numPages) {
+          renderDataPage1.push({
+            pageIndex: index,
+            xPos: i * gridWidth,
+            yPos: gridHeight,
+          });
+        }
+      }
+
+      for (let i = 0; i < 3; i++) {
+        const index = gridItemIndex * 18 + 13 + i * 2;
+        if (index <= pdf.numPages) {
+          renderDataPage1.push({
+            pageIndex: index,
+            xPos: i * gridWidth,
+            yPos: 2 * gridHeight,
+          });
+        }
+      }
+
+      // Collect data for the second page
+      for (let i = 2; i >= 0; i--) {
+        const index = gridItemIndex * 18 + 2 + (2 - i) * 2;
+        if (index <= pdf.numPages) {
+          renderDataPage2.push({
+            pageIndex: index,
+            xPos: i * gridWidth,
+            yPos: 0,
+          });
+        }
+      }
+
+      for (let i = 2; i >= 0; i--) {
+        const index = gridItemIndex * 18 + 8 + (2 - i) * 2;
+        if (index <= pdf.numPages) {
+          renderDataPage2.push({
+            pageIndex: index,
+            xPos: i * gridWidth,
+            yPos: gridHeight,
+          });
+        }
+      }
+
+      for (let i = 2; i >= 0; i--) {
+        const index = gridItemIndex * 18 + 14 + (2 - i) * 2;
+        if (index <= pdf.numPages) {
+          renderDataPage2.push({
+            pageIndex: index,
+            xPos: i * gridWidth,
+            yPos: 2 * gridHeight,
+          });
+        }
+      }
+
+      // Render the first page
+      if (gridItemIndex > 0) {
+        doc.addPage();
+      }
+      for (let item of renderDataPage1) {
+        const page = await pdf.getPage(item.pageIndex);
+        const viewport = page.getViewport({ scale: 0.1 });
+        const scale = Math.min(
+          gridWidth / viewport.width,
+          gridHeight / viewport.height
+        );
+        const scaledViewport = page.getViewport({ scale });
+
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.height = scaledViewport.height;
+        canvas.width = scaledViewport.width;
+
+        const renderContext = {
+          canvasContext: context,
+          viewport: scaledViewport,
+        };
+
+        await page.render(renderContext).promise;
+
+        const imageData = canvas.toDataURL("image/jpeg", 1.0);
+        doc.addImage(
+          imageData,
+          "JPEG",
+          item.xPos,
+          item.yPos,
+          gridWidth,
+          gridHeight
+        );
+        doc.setFontSize(8);
+        doc.text(
+          item.pageIndex.toString(),
+          item.xPos + gridWidth - 10,
+          item.yPos + gridHeight - 5,
+          { align: "right" }
+        );
+      }
+
+      // Render the second page
+      doc.addPage();
+      for (let item of renderDataPage2) {
+        const page = await pdf.getPage(item.pageIndex);
+        const viewport = page.getViewport({ scale: 0.1 });
+        const scale = Math.min(
+          gridWidth / viewport.width,
+          gridHeight / viewport.height
+        );
+        const scaledViewport = page.getViewport({ scale });
+
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.height = scaledViewport.height;
+        canvas.width = scaledViewport.width;
+
+        const renderContext = {
+          canvasContext: context,
+          viewport: scaledViewport,
+        };
+
+        await page.render(renderContext).promise;
+
+        const imageData = canvas.toDataURL("image/jpeg", 1.0);
+        doc.addImage(
+          imageData,
+          "JPEG",
+          item.xPos,
+          item.yPos,
+          gridWidth,
+          gridHeight
+        );
+        doc.setFontSize(8);
+        doc.text(
+          item.pageIndex.toString(),
+          item.xPos + gridWidth - 10,
+          item.yPos + gridHeight - 5,
+          { align: "right" }
+        );
+      }
+
+      // Move to the next set of grid items
+      gridItemIndex++;
+    }
+
+    // Save the generated PDF
+    doc.save("doubleSidedGridPDF.pdf");
+  };
+
   const addGrid = () => {
     setBits([...bits, { title: "", content: "" }]); // Add a new grid item with empty title and content
   };
@@ -121,7 +307,10 @@ const App = () => {
             onChange={handleFileChange}
           />
           <button type="button" onClick={generatePDF}>
-            Generate Grid PDF
+            Generate PDF
+          </button>
+          <button type="button" onClick={generatePDFDoubleSide}>
+            Generate PDF ( Double Side)
           </button>
         </div>
         {/* {bits.map((bit, index) => (
