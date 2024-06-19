@@ -5,6 +5,10 @@ import * as pdfjsLib from "pdfjs-dist";
 import "pdfjs-dist/web/pdf_viewer.css";
 import DropFile from "./components/DropFile";
 import Button from "./components/Button";
+import ReactGA from "react-ga";
+
+const GA_ID = "G-D8E4JDQRXL";
+ReactGA.initialize(GA_ID);
 
 // Configure the worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
@@ -24,6 +28,11 @@ const App = () => {
   };
 
   const generatePDF = async () => {
+    ReactGA.event({
+      category: 'Button Click',
+      action: 'Generate PDF',
+      label: 'Generate PDF'
+    });
     setIsLoading(true);
     try {
       if (!pdfFile) {
@@ -124,7 +133,7 @@ const App = () => {
       }
 
       doc.save("blinko-note.pdf");
-      setPdfFile(null)
+      setPdfFile(null);
       updateProgress("PDF generation completed.");
     } catch (error) {
       console.log(error);
@@ -135,6 +144,11 @@ const App = () => {
   };
 
   const generatePDFDoubleSide = async () => {
+    ReactGA.event({
+      category: 'Button Click',
+      action: 'Generate PDF double',
+      label: 'Generate PDF double'
+    });
     setIsLoading(true);
     try {
       if (!pdfFile) {
@@ -286,9 +300,14 @@ const App = () => {
             { align: "right" }
           );
           doc.setFontSize(3);
-          doc.text("www.blinko.one", item.xPos + 10, item.yPos + gridHeight - 2, {
-            align: "left",
-          });
+          doc.text(
+            "www.blinko.one",
+            item.xPos + 10,
+            item.yPos + gridHeight - 2,
+            {
+              align: "left",
+            }
+          );
         }
 
         doc.addPage();
@@ -346,16 +365,21 @@ const App = () => {
             { align: "right" }
           );
           doc.setFontSize(3);
-          doc.text("www.blinko.one", item.xPos + 10, item.yPos + gridHeight - 2, {
-            align: "left",
-          });
+          doc.text(
+            "www.blinko.one",
+            item.xPos + 10,
+            item.yPos + gridHeight - 2,
+            {
+              align: "left",
+            }
+          );
         }
         gridItemIndex++;
       }
 
       updateProgress("Saving the PDF file...");
       doc.save("blinko-double-side.pdf");
-      setPdfFile(null)
+      setPdfFile(null);
       updateProgress("PDF generation completed.");
     } catch (error) {
       console.log(error);
