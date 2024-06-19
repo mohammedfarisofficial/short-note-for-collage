@@ -8,10 +8,10 @@ import "./App.css";
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
 
 const App = () => {
-  const [bits, setBits] = useState([{ title: "", content: "" }]); // Initial state with one grid item
+  const [bits, setBits] = useState([{ title: "", content: "" }]);
   const [pdfFile, setPdfFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [progress, setProgress] = useState(""); // State to track progress
+  const [progress, setProgress] = useState(""); 
 
   const handleFileChange = (event) => {
     setPdfFile(event.target.files[0]);
@@ -41,17 +41,17 @@ const App = () => {
   
       for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
         if (pageNumber > 1 && pageNumber % 9 === 1) {
-          doc.addPage(); // Add a new page for every set of 9 pages
+          doc.addPage();
         }
   
         const page = await pdf.getPage(pageNumber);
-        const pageWidth = 210; // A4 page width in mm
-        const pageHeight = 297; // A4 page height in mm
-        const gridWidth = pageWidth / 3; // Width of each grid cell
-        const gridHeight = pageHeight / 3; // Height of each grid cell
+        const pageWidth = 210; 
+        const pageHeight = 297; 
+        const gridWidth = pageWidth / 3; 
+        const gridHeight = pageHeight / 3; 
   
-        // Scale content to fit within each grid cell
-        const viewport = page.getViewport({ scale: 0.1 }); // Increase scale for higher quality
+
+        const viewport = page.getViewport({ scale: 0.1 }); 
         const scale = Math.min(
           gridWidth / viewport.width,
           gridHeight / viewport.height
@@ -69,10 +69,10 @@ const App = () => {
         };
   
         await page.render(renderContext).promise;
-        const imageData = canvas.toDataURL("image/jpeg", 1.0); // Convert canvas to JPEG image
+        const imageData = canvas.toDataURL("image/jpeg", 1.0); 
   
-        const col = ((pageCount - 1) % 9) % 3; // Column index (0-2)
-        const row = Math.floor(((pageCount - 1) % 9) / 3); // Row index (0-2)
+        const col = ((pageCount - 1) % 9) % 3; 
+        const row = Math.floor(((pageCount - 1) % 9) / 3);
         const xPosition = col * gridWidth;
         const yPosition = row * gridHeight;
   
@@ -85,19 +85,18 @@ const App = () => {
           gridHeight
         );
   
-        // Draw lines to divide the grid cells
+        
         if (col < 2) {
-          // Vertical lines between columns
-          doc.setLineWidth(0.2); // Set line width to 0.2mm
+          
+          doc.setLineWidth(0.2); 
           doc.line(xPosition + gridWidth, yPosition, xPosition + gridWidth, yPosition + gridHeight);
         }
         if (row < 2) {
-          // Horizontal lines between rows
-          doc.setLineWidth(0.2); // Set line width to 0.2mm
+          
+          doc.setLineWidth(0.2);
           doc.line(xPosition, yPosition + gridHeight, xPosition + gridWidth, yPosition + gridHeight);
         }
   
-        // Add page number in bottom-right corner
         doc.setFontSize(8);
         doc.text(
           pageNumber.toString(),
@@ -112,7 +111,7 @@ const App = () => {
   
         pageCount++;
   
-        // Update progress message
+        
         const progressMessage = `Rendering page ${pageNumber} of ${pdf.numPages}`;
         updateProgress(progressMessage);
       }
@@ -147,10 +146,10 @@ const App = () => {
         format: "a4",
       });
   
-      const pageWidth = 210; // A4 page width in mm
-      const pageHeight = 297; // A4 page height in mm
-      const gridWidth = pageWidth / 3; // Width of each grid cell
-      const gridHeight = pageHeight / 3; // Height of each grid cell
+      const pageWidth = 210;
+      const pageHeight = 297; 
+      const gridWidth = pageWidth / 3;
+      const gridHeight = pageHeight / 3;
   
       let gridItemIndex = 0;
   
@@ -158,7 +157,6 @@ const App = () => {
         const renderDataPage1 = [];
         const renderDataPage2 = [];
   
-        // Collect data for the first page
         for (let i = 0; i < 3; i++) {
           const index = gridItemIndex * 18 + 1 + i * 2;
           if (index <= pdf.numPages) {
@@ -192,7 +190,6 @@ const App = () => {
           }
         }
   
-        // Collect data for the second page
         for (let i = 2; i >= 0; i--) {
           const index = gridItemIndex * 18 + 2 + (2 - i) * 2;
           if (index <= pdf.numPages) {
@@ -226,7 +223,6 @@ const App = () => {
           }
         }
   
-        // Render the first page
         if (gridItemIndex > 0) {
           doc.addPage();
         }
@@ -262,15 +258,15 @@ const App = () => {
             gridHeight
           );
   
-          // Draw lines to divide the grid cells
+          
           if (item.xPos !== 0) {
-            // Vertical lines between columns
-            doc.setLineWidth(0.2); // Set line width to 0.2mm
+            
+            doc.setLineWidth(0.2);
             doc.line(item.xPos, item.yPos, item.xPos, item.yPos + gridHeight);
           }
           if (item.yPos !== 2 * gridHeight) {
-            // Horizontal lines between rows
-            doc.setLineWidth(0.2); // Set line width to 0.2mm
+            
+            doc.setLineWidth(0.2); 
             doc.line(item.xPos, item.yPos + gridHeight, item.xPos + gridWidth, item.yPos + gridHeight);
           }
   
@@ -287,7 +283,6 @@ const App = () => {
           });
         }
   
-        // Render the second page
         doc.addPage();
         for (let item of renderDataPage2) {
           updateProgress(`Rendering page ${item.pageIndex} for second side...`);
@@ -321,15 +316,13 @@ const App = () => {
             gridHeight
           );
   
-          // Draw lines to divide the grid cells
+          
           if (item.xPos !== 0) {
-            // Vertical lines between columns
-            doc.setLineWidth(0.2); // Set line width to 0.2mm
+            doc.setLineWidth(0.2); 
             doc.line(item.xPos, item.yPos, item.xPos, item.yPos + gridHeight);
           }
           if (item.yPos !== 2 * gridHeight) {
-            // Horizontal lines between rows
-            doc.setLineWidth(0.2); // Set line width to 0.2mm
+            doc.setLineWidth(0.2); 
             doc.line(item.xPos, item.yPos + gridHeight, item.xPos + gridWidth, item.yPos + gridHeight);
           }
   
@@ -345,8 +338,6 @@ const App = () => {
             align: "left",
           });
         }
-  
-        // Move to the next set of grid items
         gridItemIndex++;
       }
   
@@ -363,7 +354,7 @@ const App = () => {
   
 
   const addGrid = () => {
-    setBits([...bits, { title: "", content: "" }]); // Add a new grid item with empty title and content
+    setBits([...bits, { title: "", content: "" }]); 
   };
 
   return (
