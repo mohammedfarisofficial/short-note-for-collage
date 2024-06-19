@@ -5,7 +5,7 @@ import * as pdfjsLib from "pdfjs-dist";
 import "pdfjs-dist/web/pdf_viewer.css";
 import DropFile from "./components/DropFile";
 import Button from "./components/Button";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 
 const GA_ID = "G-D8E4JDQRXL";
 ReactGA.initialize(GA_ID);
@@ -29,9 +29,9 @@ const App = () => {
 
   const generatePDF = async () => {
     ReactGA.event({
-      category: 'Button Click',
-      action: 'Generate PDF',
-      label: 'Generate PDF'
+      category: "Button Click",
+      action: "Generate PDF",
+      label: "Generate PDF",
     });
     setIsLoading(true);
     try {
@@ -145,9 +145,9 @@ const App = () => {
 
   const generatePDFDoubleSide = async () => {
     ReactGA.event({
-      category: 'Button Click',
-      action: 'Generate PDF double',
-      label: 'Generate PDF double'
+      category: "Button Click",
+      action: "Generate PDF double",
+      label: "Generate PDF double",
     });
     setIsLoading(true);
     try {
