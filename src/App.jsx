@@ -29,9 +29,8 @@ const App = () => {
 
   const generatePDF = async () => {
     ReactGA.event({
-      category: "Button Click",
+      category: "Button-Click",
       action: "Generate PDF",
-      label: "Generate PDF",
     });
     setIsLoading(true);
     try {
@@ -145,9 +144,8 @@ const App = () => {
 
   const generatePDFDoubleSide = async () => {
     ReactGA.event({
-      category: "Button Click",
-      action: "Generate PDF double",
-      label: "Generate PDF double",
+      category: "Button-Click",
+      action: "Generate PDF Double",
     });
     setIsLoading(true);
     try {
