@@ -6,6 +6,7 @@ import "pdfjs-dist/web/pdf_viewer.css";
 import DropFile from "./components/DropFile";
 import Button from "./components/Button";
 import ReactGA from "react-ga4";
+import Navbar from "./components/Navbar";
 
 const GA_ID = "G-D8E4JDQRXL";
 ReactGA.initialize(GA_ID);
@@ -393,6 +394,7 @@ const App = () => {
 
   return (
     <div className="container">
+      <Navbar/>
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="inner-container">
           <h2>Blinko 🚀</h2>
