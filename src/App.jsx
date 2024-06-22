@@ -383,8 +383,8 @@ const App = () => {
         gridItemIndex++;
       }
 
-      updateProgress("Saving the PDF file...");
-      doc.save("blinko-double-side.pdf");
+      setFinalDoc(doc);
+      onOpen();
       setPdfFile(null);
       updateProgress("PDF generation completed.");
     } catch (error) {

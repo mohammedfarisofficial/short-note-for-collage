@@ -19,7 +19,6 @@ const SaveAs = ({
 }) => {
   const brandName = "blinko";
   const [fileName, setFileName] = useState("");
-  const projectCreateHandler = async () => {};
 
   useEffect(() => {
     console.log(fileName);
