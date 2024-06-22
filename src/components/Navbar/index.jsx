@@ -6,7 +6,7 @@ const Navbar = () => {
       <p className="navbar-logo">
         Blinko <span>( beta )</span>
       </p>
-      <p className="navbar-version">v0.2</p>
+      <p className="navbar-version">v0.3</p>
     </div>
   );
 };

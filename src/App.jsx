@@ -141,7 +141,6 @@ const App = () => {
       onOpen();
       setPdfFile(null);
       updateProgress("PDF generation completed.");
-
     } catch (error) {
       console.log(error);
       updateProgress("An error occurred during PDF generation.");
@@ -420,10 +419,15 @@ const App = () => {
             Generate
           </Button>
           <Button disabled={isLoading} onClick={generatePDFDoubleSide}>
-            Generate ( Double Side)
+            Generate ( Double Side )
           </Button>
           <p className="system-status">
-            System Status : {isLoading ? `${progress}` : "Ready"}
+            System Status :{" "}
+            {isLoading ? (
+              <span style={{ color: "yellowgreen"}}>{progress}</span>
+            ) : (
+              <span style={{ color: "green" }}>Ready</span>
+            )}
           </p>
         </div>
       </form>
