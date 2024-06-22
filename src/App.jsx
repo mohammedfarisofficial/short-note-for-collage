@@ -7,6 +7,8 @@ import DropFile from "./components/DropFile";
 import Button from "./components/Button";
 import ReactGA from "react-ga4";
 import Navbar from "./components/Navbar";
+import SaveAs from "./components/Modals/SaveAs";
+import useDisclosure from "./hooks/useDisclosure";
 
 const GA_ID = "G-D8E4JDQRXL";
 ReactGA.initialize(GA_ID);
@@ -17,8 +19,11 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.j
 const App = () => {
   const [bits, setBits] = useState([{ title: "", content: "" }]);
   const [pdfFile, setPdfFile] = useState(null);
+  const [finalDoc, setFinalDoc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState("");
+
+  const { onClose, onOpen, isOpen } = useDisclosure();
 
   const handleFileChange = (event) => {
     setPdfFile(event.target.files[0]);
@@ -132,9 +137,11 @@ const App = () => {
         updateProgress(progressMessage);
       }
 
-      doc.save("blinko-note.pdf");
+      setFinalDoc(doc);
+      onOpen();
       setPdfFile(null);
       updateProgress("PDF generation completed.");
+
     } catch (error) {
       console.log(error);
       updateProgress("An error occurred during PDF generation.");
@@ -387,14 +394,20 @@ const App = () => {
       setIsLoading(false);
     }
   };
-
-  const addGrid = () => {
-    setBits([...bits, { title: "", content: "" }]);
-  };
-
   return (
     <div className="container">
-      <Navbar/>
+      <SaveAs
+        isOpen={isOpen}
+        onClose={onClose}
+        deleteButtonLabel="Cancel"
+        itemBody="Are you sure you want to delete this item?"
+        errorText=""
+        title="Save as"
+        actionButtonLabel="Save"
+        doc={finalDoc}
+      />
+      <Navbar />
+
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="inner-container">
           <h2>Blinko 🚀</h2>
