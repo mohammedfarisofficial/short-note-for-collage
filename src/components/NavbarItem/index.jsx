@@ -1,39 +1,52 @@
+import { useEffect } from "react";
 import useDisclosure from "../../hooks/useDisclosure";
 import { motion } from "framer-motion";
 import "./style.scss";
+import { ktuLogo } from "../../contants/logos";
 
-const NavbarItem = ({ title }) => {
+const NavbarItem = ({ title, isPanelActive, courses, logo }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const children = [
-    { id: "01", title: "sub " },
-    { id: "01", title: "sub 1" },
-    { id: "01", title: "sub 1" },
-    { id: "01", title: "sub 1" },
-  ];
+  // default expand for ktu
+  useEffect(() => {
+    if (!title) {
+      return;
+    }
+    if (title === "KTU") {
+      onOpen();
+    }
+  }, [isPanelActive]);
+
+  useEffect(() => {
+    if (!isPanelActive) {
+      onClose();
+    }
+  }, [isPanelActive]);
+
   return (
-    <motion.div
-      animate={{ backgroundColor: isOpen ? "#0000ff25" : "transparent" }}
-      className="navbar-item-container"
-      onClick={() => (isOpen ? onClose() : onOpen())}
-    >
+    <motion.div className="navbar-item-container">
       <motion.div
-        animate={{ backgroundColor: isOpen ? "#892eff" : "transparent" }}
+        animate={{
+          backgroundColor: isOpen ? "#222329" : "#ffffff00",
+          opacity: isPanelActive ? 1 : 0,
+        }}
         className="navbar-item-title"
+        onClick={() => (isOpen ? onClose() : onOpen())}
       >
-        {title}
+        <img src={logo} />
+        <p>{title}</p>
       </motion.div>
       <motion.div
         animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
         className="navbar-items-child-container"
       >
-        {children?.map((item) => (
+        {courses?.map((item) => (
           <motion.div className="navbar-item-child">
             <motion.p
-              animate={{ opacity: isOpen ? 1 : 0 }}
-              whileHover={{ color: "#892eff" }}
+              animate={{ opacity: isOpen ? 0.7 : 0 }}
+              whileHover={{ opacity: 1 }}
             >
-              {item.title}
+              {item?.subject}
             </motion.p>
           </motion.div>
         ))}

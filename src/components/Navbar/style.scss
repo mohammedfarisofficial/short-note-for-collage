@@ -23,11 +23,17 @@
 }
 
 .navbar-toggle {
-  width: 30px;
-  height: 30px;
-  background-color: red;
+
+  // background-color: red;
   margin-right: 1rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  img{
+    width: 20px;
+    object-fit: contain;
+    object-position: center;
+  }
 }
 .navbar-overlay {
   position: fixed;
@@ -37,9 +43,42 @@
   background-color: #1a1b21;
   z-index: 99;
   color: white;
+  overflow-y: scroll;
+  // padding: 0 2rem;
 }
 
 .navbar-items-container {
   width: 100%;
   padding: 0 1rem;
+  p {
+    font-size: 14px;
+    color: white;
+    margin: 0.5rem 0;
+  }
+}
+
+.navbar-close-container {
+  width: 100%;
+  // background-color: red;
+  padding: 1rem 1rem;
+  display: flex;
+  justify-content: flex-end;
+  .navbar-close {
+    width: 35px;
+    height: 35px;
+    // display: flex !important;
+    justify-content: center;
+    align-items: center;
+    // background-color: green;
+    border-radius: 10px;
+    border: 0.5px solid rgba(136, 136, 136, 0.529) ;
+    &:hover{
+      background-color: rgba(128, 128, 128, 0.128);
+    }
+    img {
+      width: 15px;
+      object-fit: contain;
+      object-position: center;
+    }
+  }
 }

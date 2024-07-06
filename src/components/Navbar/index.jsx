@@ -1,36 +1,67 @@
 import "./style.scss";
+import { useEffect } from "react";
 
 import useDimension from "../../hooks/useDimension";
 import useDisclosure from "../../hooks/useDisclosure";
 
 import { motion } from "framer-motion";
 import NavbarItem from "../NavbarItem";
+import { backIcon, burgerIcon } from "../../contants/icons";
+import { universities } from "../../data/universities";
 
 const Navbar = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const { width } = useDimension();
+  const { isMobile } = useDimension();
+
+  useEffect(() => {
+    console.log(isMobile);
+  }, [isMobile]);
 
   return (
     <div className="navbar-container">
       <motion.div
         initial={{ width: 0, opacity: 0 }}
         animate={{
-          width: isOpen ? "20vw" : 0,
+          width: isOpen ? (isMobile ? "80vw" : "20vw") : 0,
           opacity: isOpen ? 1 : 0,
-          userSelect: "none",
         }}
+        transition={{ duration: 0.2 }}
         className="navbar-overlay"
       >
-        <button onClick={onClose}>close</button>
-        <div className="navbar-items-container">
-          <h4>List of Universities</h4>
-          <NavbarItem title="KTU" />
-          <NavbarItem title="Calicut" />
-          <NavbarItem title="MG" />
+        <div className="navbar-close-container">
+          <motion.div
+            initial={{ opacity: 0, display: "none" }}
+            animate={{
+              opacity: isOpen ? 1 : 0,
+              display: isOpen ? "flex" : "none",
+            }}
+            onClick={onClose}
+            className="navbar-close"
+          >
+            <img src={backIcon} />
+          </motion.div>
         </div>
+        <motion.div
+          transition={{ duration: isOpen ? 0.9 : 0.1, delay: isOpen ? 0.2 : 0 }}
+          animate={{ opacity: isOpen ? 1 : 0 }}
+          className="navbar-items-container"
+        >
+          <motion.p>List of Universities</motion.p>
+          <motion.div>
+            {universities?.map((university) => (
+              <NavbarItem
+                isPanelActive={isOpen}
+                title={university.university}
+                {...university}
+              />
+            ))}
+          </motion.div>
+        </motion.div>
       </motion.div>
       <p className="navbar-right">
-        <div className="navbar-toggle" onClick={onOpen} />
+        <div className="navbar-toggle" onClick={onOpen}>
+          <img src={burgerIcon} alt="" />
+        </div>
         Blinko <span>( beta )</span>
       </p>
       <p className="navbar-version">v0.3</p>
