@@ -48,23 +48,26 @@ const Navbar = () => {
         >
           <motion.p>List of Universities</motion.p>
           <motion.div>
-            {universities?.map((university) => (
+            {universities?.map((university, index) => (
               <NavbarItem
+                key={index}
                 isPanelActive={isOpen}
+                closePanel={onClose}
                 title={university.university}
                 {...university}
               />
             ))}
           </motion.div>
         </motion.div>
+        <div className="navbar-bottom-space" />
       </motion.div>
-      <p className="navbar-right">
+      <div className="navbar-right">
         <div className="navbar-toggle" onClick={onOpen}>
           <img src={burgerIcon} alt="" />
         </div>
         Blinko <span>( beta )</span>
-      </p>
-      <p className="navbar-version">v0.3</p>
+      </div>
+      <p className="navbar-version">v0.4</p>
     </div>
   );
 };

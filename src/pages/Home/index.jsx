@@ -11,7 +11,6 @@ import Navbar from "../../components/Navbar";
 import SaveAs from "../../components/Modals/SaveAs";
 import useDisclosure from "../../hooks/useDisclosure";
 
-
 const GA_ID = "G-D8E4JDQRXL";
 ReactGA.initialize(GA_ID);
 
@@ -397,6 +396,7 @@ const Home = () => {
   };
   return (
     <div className="container">
+      <Navbar />
       <SaveAs
         isOpen={isOpen}
         onClose={onClose}
@@ -407,7 +407,6 @@ const Home = () => {
         actionButtonLabel="Save"
         doc={finalDoc}
       />
-      <Navbar />
 
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="inner-container">
@@ -417,10 +416,17 @@ const Home = () => {
             points for easy reference.
           </p>
           <DropFile file={pdfFile} setFile={setPdfFile} />
-          <Button disabled={isLoading} type="button" onClick={generatePDF}>
+          <Button
+            disabled={isLoading || !pdfFile}
+            type="button"
+            onClick={generatePDF}
+          >
             Generate
           </Button>
-          <Button disabled={isLoading} onClick={generatePDFDoubleSide}>
+          <Button
+            disabled={isLoading || !pdfFile}
+            onClick={generatePDFDoubleSide}
+          >
             Generate ( Double Side )
           </Button>
           <p className="system-status">

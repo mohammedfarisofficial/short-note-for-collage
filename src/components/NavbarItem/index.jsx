@@ -1,12 +1,13 @@
+import "./style.scss";
 import { useEffect } from "react";
 import useDisclosure from "../../hooks/useDisclosure";
 import { motion } from "framer-motion";
-import "./style.scss";
-import { ktuLogo } from "../../contants/logos";
+import { useNavigate } from "react-router-dom";
 
-const NavbarItem = ({ title, isPanelActive, courses, logo }) => {
+const NavbarItem = ({ title, isPanelActive, courses, logo, closePanel }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
+  const navigate = useNavigate();
   // default expand for ktu
   useEffect(() => {
     if (!title) {
@@ -17,14 +18,27 @@ const NavbarItem = ({ title, isPanelActive, courses, logo }) => {
     }
   }, [isPanelActive]);
 
+  // close all
   useEffect(() => {
     if (!isPanelActive) {
       onClose();
     }
   }, [isPanelActive]);
 
+  // navlink hander
+
+  const handleNavigate = (course) => {
+    closePanel();
+    navigate("/streams", {
+      state: {
+        course,
+      },
+      replace: true,
+    });
+  };
+
   return (
-    <motion.div className="navbar-item-container">
+    <div className="navbar-item-container">
       <motion.div
         animate={{
           backgroundColor: isOpen ? "#222329" : "#ffffff00",
@@ -40,18 +54,22 @@ const NavbarItem = ({ title, isPanelActive, courses, logo }) => {
         animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
         className="navbar-items-child-container"
       >
-        {courses?.map((item) => (
-          <motion.div className="navbar-item-child">
+        {courses?.map((item, index) => (
+          <motion.div
+            className="navbar-item-child"
+            onClick={() => handleNavigate(item?.course)}
+            key={index}
+          >
             <motion.p
               animate={{ opacity: isOpen ? 0.7 : 0 }}
               whileHover={{ opacity: 1 }}
             >
-              {item?.subject}
+              {item?.course}
             </motion.p>
           </motion.div>
         ))}
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
