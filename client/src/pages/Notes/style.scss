@@ -1,0 +1,18 @@
+.notes-container {
+  padding-top: 80px;
+  width: 100vw;
+}
+.notes-list {
+  width: 100%;
+  padding: 0 2rem;
+  padding-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.note-list-mobile{
+  gap: .5rem;
+}
