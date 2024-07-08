@@ -1,11 +1,16 @@
 import "./style.scss";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import InputBox from "../../components/InputBox";
 import Button from "../../components/Button";
-import { useState } from "react";
 
 const Admin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+
+  const navigate = useNavigate()
 
   const adminLogin = () => {
     if (username !== "mohammedfaris") {
@@ -18,6 +23,7 @@ const Admin = () => {
     }
 
     console.log("login");
+    navigate("/upload")
   };
   return (
     <div className="container">

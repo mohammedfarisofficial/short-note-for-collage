@@ -7,9 +7,9 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import Button from "../../components/Button";
 
 const firebasePDFUrl =
-  "https://res.cloudinary.com/dhiy3e35c/image/upload/v1720282006/KTU_S3_Discrete_Mathematic_Syllabus_-_kerala_Notes_nbfeum.pdf"; // Your Firebase PDF URL
+  "https://firebasestorage.googleapis.com/v0/b/blinko-4f62f.appspot.com/o/pdfefasdf-blinko.pdf?alt=media&token=94847b91-d1f9-4927-bc79-a3516962eff1"; // Your Firebase PDF URL
 const errfirebasePDFUrl =
-  "https://res.cloudinary.com/dhiy3e35c/imagee/upload/v1720282006/KTU_S3_Discrete_Mathematic_Syllabus_-_kerala_Notes_nbfeum.pdf"; // Your Firebase PDF URL
+  "https://res.cloudinary.com/dhiy3e35c/image/upload/v1720282006/KTU_S3_Discrete_Mathematic_Syllabus_-_kerala_Notes_nbfeum.pdf"; // Your Firebase PDF URL
 
 const Note = () => {
   return (
@@ -20,7 +20,7 @@ const Note = () => {
         subText="Click the Download"
         renderAction={<Button>Download</Button>}
       />
-      <Viewer theme="black" fileUrl={errfirebasePDFUrl} />
+      <Viewer theme="black" fileUrl={firebasePDFUrl} />
     </div>
   );
 };

@@ -17,6 +17,8 @@ import Semesters from "../pages/Semester";
 import Subjects from "../pages/Subjects";
 import Note from "../pages/Note";
 import Test from "../pages/Test";
+import Upload from "../pages/Upload";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -30,6 +32,7 @@ const router = createBrowserRouter(
       <Route path="/test" element={<Test />} />
       <Route element={<AuthRoute />}>
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="upload" element={<Upload />} />
       </Route>
     </>
   )
