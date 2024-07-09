@@ -1,0 +1,22 @@
+.upload-container {
+  padding-top: 80px;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  color: white;
+  .inner-container {
+    width: 350px;
+    min-height: 300px;
+    max-width: 90vw;
+    background-color: #1a1b21;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 8px;
+    padding: 1rem 0;
+  }
+}
+
+.admin-form {
+  padding: 1rem 2rem !important ;
+}
