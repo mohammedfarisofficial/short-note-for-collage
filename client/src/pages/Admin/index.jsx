@@ -12,6 +12,8 @@ const Admin = () => {
 
   const navigate = useNavigate()
 
+  console.log("git check 1")
+
   const adminLogin = () => {
     if (username !== "mohammedfaris") {
       console.log("wrong username");
