@@ -16,5 +16,18 @@ const createSemester = async (req, res) => {
     console.log(err);
   }
 };
-
-export { createSemester };
+const getSemesters = async (req, res) => {
+  const { streamId } = req.params;
+  try {
+    if (streamId) {
+      const semesters = await Semester.find({ streamId });
+      console.log("Semesters", semesters);
+      if (semesters) {
+        res.status(200).json(semesters);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+export { createSemester, getSemesters };

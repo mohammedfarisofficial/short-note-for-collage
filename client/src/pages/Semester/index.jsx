@@ -3,6 +3,9 @@ import "./style.scss";
 import Navbar from "../../components/Navbar";
 import Header from "../../components/Header";
 import ListItem from "../../components/ListItem";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const semesters = [
   { id: "01", semester: "S1" },
@@ -16,6 +19,29 @@ const semesters = [
 ];
 
 const Semesters = () => {
+  const [semesters, setSemesters] = useState(null);
+
+  const location = useLocation();
+
+  const fetchSemesters = async () => {
+    try {
+      console.log("calling fetch");
+      const response = await axios.get(
+        `http://localhost:3001/api/v1/semester/${location?.state?.streamid}`
+      );
+      const { data, status } = response;
+      if (status === 200) {
+        console.log(data);
+        setSemesters(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchSemesters();
+  }, []);
+
   return (
     <div className="semesters-container">
       <Navbar />
@@ -24,9 +50,19 @@ const Semesters = () => {
         subText={`listed the semester in Computer science and engineering`}
       />
       <div className="semesters-list">
-        {semesters?.map((semester, index) => (
-          <ListItem path="/subjects" title={semester.semester} key={index} />
-        ))}
+        {semesters ? (
+          <>
+            {semesters?.map((semester, index) => (
+              <ListItem
+                {...semester}
+                onClick={() => navigation(semester._id)}
+                key={index}
+              />
+            ))}
+          </>
+        ) : (
+          <p>No Sem</p>
+        )}
       </div>
     </div>
   );
