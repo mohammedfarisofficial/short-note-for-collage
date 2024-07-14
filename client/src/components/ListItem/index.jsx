@@ -1,10 +1,9 @@
 import "./style.scss";
-import { Link } from "react-router-dom";
-const ListItem = ({ title, path }) => {
+const ListItem = ({ name, path, ...props }) => {
   return (
-    <Link to={path} className="list-container">
-      <h3>{title}</h3>
-    </Link>
+    <div {...props} className="list-container">
+      <h3>{name}</h3>
+    </div>
   );
 };
 

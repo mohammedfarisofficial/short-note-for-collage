@@ -122,7 +122,7 @@ const Upload = () => {
             <DropFile file={pdfFile} setFile={setPdfFile} />
           </>
         )}
-        <Button onClick={uploadFile}>Login</Button>
+        <Button onClick={uploadFile}>Upload New</Button>
       </div>
     </div>
   );

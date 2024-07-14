@@ -12,7 +12,7 @@ const Admin = () => {
 
   const navigate = useNavigate()
 
-  console.log("git check 1")
+  console.log("git check 2")
 
   const adminLogin = () => {
     if (username !== "mohammedfaris") {
