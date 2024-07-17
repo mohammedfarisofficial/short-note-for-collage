@@ -21,6 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import DropBox from "@/components/ui/drop-box";
 
 const page = () => {
   const [bits, setBits] = useState([{ title: "", content: "" }]);
@@ -396,8 +397,6 @@ const page = () => {
   };
   return (
     <div className="w-full h-[100vh] px-20 flex justify-center items-center">
-      {pdfFile && pdfFile.name}
-
       <Card>
         <CardHeader>
           <CardTitle>Upload PDF</CardTitle>
@@ -406,16 +405,15 @@ const page = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <input
-            type="file"
-            onChange={(e) => setPdfFile(e.target.files[0])}
-            name="upload-file"
-            id=""
-          />
+          <DropBox file={pdfFile} setFile={setPdfFile} />
         </CardContent>
-        <CardFooter>
-          <Button onClick={generatePDF}>Generate single</Button>
-          <Button onClick={generatePDFDoubleSide}>Generate double</Button>
+        <CardFooter className="flex justify-center gap-[15px]">
+          <Button variant="secondary" onClick={generatePDF}>
+            Generate single
+          </Button>
+          <Button variant="secondary" onClick={generatePDFDoubleSide}>
+            Generate double
+          </Button>
         </CardFooter>
       </Card>
     </div>
