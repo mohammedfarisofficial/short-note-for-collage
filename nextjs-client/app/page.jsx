@@ -12,6 +12,16 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 const page = () => {
   const [bits, setBits] = useState([{ title: "", content: "" }]);
   const [pdfFile, setPdfFile] = useState(null);
@@ -385,16 +395,29 @@ const page = () => {
     }
   };
   return (
-    <div className="w-full px-20">
-      <input
-        type="file"
-        onChange={(e) => setPdfFile(e.target.files[0])}
-        name="upload-file"
-        id=""
-      />
+    <div className="w-full h-[100vh] px-20 flex justify-center items-center">
       {pdfFile && pdfFile.name}
-      <button onClick={generatePDF}>Generate single side</button>
-      <button onClick={generatePDFDoubleSide}>Generate Double side</button>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Upload PDF</CardTitle>
+          <CardDescription>
+            Upload your PDF to quickly generate concise notes
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <input
+            type="file"
+            onChange={(e) => setPdfFile(e.target.files[0])}
+            name="upload-file"
+            id=""
+          />
+        </CardContent>
+        <CardFooter>
+          <Button onClick={generatePDF}>Generate single</Button>
+          <Button onClick={generatePDFDoubleSide}>Generate double</Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 };
