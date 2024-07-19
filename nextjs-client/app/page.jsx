@@ -2,15 +2,12 @@
 import { useState } from "react";
 import jsPDF from "jspdf";
 import * as pdfjsLib from "pdfjs-dist";
-import "pdfjs-dist/web/pdf_viewer.css";
+// import "pdfjs-dist/web/pdf_viewer.css";
 
 import { pdfjs } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-// react-pdf worker setup
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
-).toString();
+// pdfjs.GlobalWorkerOptions.workerSrc="https://unpkg.com/pdfjs-dist@4.4.168/legacy/build/pdf.worker.min.mjs"
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +20,7 @@ import {
 } from "@/components/ui/card";
 import DropBox from "@/components/ui/drop-box";
 
-const page = () => {
+const Home = () => {
   const [bits, setBits] = useState([{ title: "", content: "" }]);
   const [pdfFile, setPdfFile] = useState(null);
   const [finalDoc, setFinalDoc] = useState(null);
@@ -420,4 +417,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Home;
