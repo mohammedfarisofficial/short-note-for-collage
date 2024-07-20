@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import protectedRoute from "../auth/protectedRoute";
 
 const Dashboard = () => {
   return (
@@ -10,4 +12,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default protectedRoute(Dashboard);

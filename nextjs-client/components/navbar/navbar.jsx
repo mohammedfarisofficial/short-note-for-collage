@@ -18,19 +18,24 @@ import { Button } from "@/components/ui/button";
 import { Moon, Sun, Menu } from "lucide-react";
 import { useTheme } from "next-themes";
 
+import { useRouter } from "next/navigation";
+
 // auth
 import { signIn, signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
   const { setTheme } = useTheme();
+  const router = useRouter();
 
   const session = useSession();
 
-  if (session) {
+  if (session.status === "authenticated") {
     console.log("session data", session);
     return (
       <>
-        {JSON.stringify(session?.data)}
+        <Link href="/dashboard">dashboard</Link>
+        <Link href="/admin-test">admin route</Link>
+        {session?.data?.user?.name}
         <br />
         <button onClick={() => signOut()}>Sign Out</button>
       </>
@@ -39,7 +44,10 @@ const Navbar = () => {
 
   return (
     <>
-      Not Sign in <button onClick={() => signIn("github")}>Sign in </button>
+      <p>Not Sign in</p>
+      <Link href="/dashboard">dashboard</Link>
+      <button onClick={() => router.push("/sign-up")}>Sign in</button>{" "}
+      <button onClick={() => router.push("/sign-in")}>Sign Up</button>
     </>
   );
 
