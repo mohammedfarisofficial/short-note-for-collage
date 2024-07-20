@@ -24,12 +24,13 @@ import { signIn, signOut, useSession } from "next-auth/react";
 const Navbar = () => {
   const { setTheme } = useTheme();
 
-  const { data: session } = useSession();
+  const session = useSession();
 
   if (session) {
+    console.log("session data", session);
     return (
       <>
-        {session?.user?.name}
+        {JSON.stringify(session?.data)}
         <br />
         <button onClick={() => signOut()}>Sign Out</button>
       </>
@@ -38,7 +39,7 @@ const Navbar = () => {
 
   return (
     <>
-      Not Sign in <button onClick={() => signIn()}>Sign in </button>
+      Not Sign in <button onClick={() => signIn("github")}>Sign in </button>
     </>
   );
 
