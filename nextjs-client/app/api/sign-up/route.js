@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 
 // Sign Up
-
 export const POST = async (request) => {
   const {
     registerCredential: { email, password, username },

@@ -10,26 +10,26 @@ import SessionProvider from "./auth/SessionProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 import Navbar from "@/components/navbar/navbar";
+import ReduxProvider from "./store/provider/ReduxProvider";
 
 export default async function RootLayout({ children }) {
   const session = await getServerSession();
-
-
-
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider session={session}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Navbar />
-            {children}
-          </ThemeProvider>
-        </SessionProvider>
+        <ReduxProvider>
+          <SessionProvider session={session}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navbar />
+              {children}
+            </ThemeProvider>
+          </SessionProvider>
+        </ReduxProvider>
       </body>
     </html>
   );
