@@ -36,9 +36,9 @@ const DropFile = ({ file, setFile }) => {
       ) : (
         <>
           <FileUp />
-          <p className="text-xs text-[#66676b]">
-            Drag & Drop or <span className="text-[#892eff]">Choose file</span>
-            to upload
+          <p className="text-xs mt-2 text-[#66676b]">
+            Drag & Drop or <span className="text-white dark:text-white">Choose file </span>
+             to upload
           </p>
           <p className="text-xs text-[#66676b]">Maximum size: 25MB</p>
           <input

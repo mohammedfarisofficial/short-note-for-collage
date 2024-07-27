@@ -27,7 +27,6 @@ import { useRouter } from "next/navigation";
 import NavbarItem from "./components/navbar-item";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "@/app/store/reducers/authSlice";
-import { universities } from "@/data/univerisities";
 
 const Navbar = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -46,7 +45,8 @@ const Navbar = () => {
           </SheetTrigger>
           <SheetContent className="overflow-y-scroll" side="left">
             <SheetHeader>
-              <SheetTitle>test</SheetTitle>
+              <SheetTitle>Choose your university</SheetTitle>
+              <SheetDescription>Universities in kerala</SheetDescription>
               {navigation &&
                 navigation.map((university, index) => (
                   <NavbarItem {...university} key={index} />

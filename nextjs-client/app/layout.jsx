@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 
 // theme
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+
 // next auth
 import { getServerSession } from "next-auth";
 import SessionProvider from "./auth/SessionProvider";
@@ -23,6 +25,7 @@ export default async function RootLayout({ children }) {
               enableSystem
               disableTransitionOnChange
             >
+              <Toaster />
               <Navbar />
               {children}
             </ThemeProvider>

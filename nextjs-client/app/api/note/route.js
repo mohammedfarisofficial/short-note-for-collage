@@ -63,6 +63,7 @@ export const POST = async (request) => {
 
 export const GET = async () => {
   try {
+    await connect();
     const notes = await Note.find();
     if (!notes) {
       return new NextResponse("Notes not found!", { status: 404 });
