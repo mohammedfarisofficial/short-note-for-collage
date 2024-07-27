@@ -24,37 +24,18 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 
 // auth
-import { signIn, signOut, useSession } from "next-auth/react";
 import NavbarItem from "./components/navbar-item";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogout } from "@/app/store/reducers/authSlice";
+import { universities } from "@/data/univerisities";
 
 const Navbar = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { navigation } = useSelector((state) => state.ui);
   const { setTheme } = useTheme();
+
   const router = useRouter();
-
-  const session = useSession();
-  console.log(session);
-
-  // if (session.status === "authenticated") {
-  //   console.log("session data", session);
-  //   return (
-  //     <>
-  //       <Link href="/dashboard">dashboard</Link>
-  //       <Link href="/admin-test">admin route</Link>
-  //       {session?.data?.user?.name}
-  //       <br />
-  //       <button onClick={() => signOut()}>Sign Out</button>
-  //     </>
-  //   );
-  // }
-
-  // return (
-  //   <>
-  //     <p>Not Sign in</p>
-  //     <Link href="/dashboard">dashboard</Link>
-  //     <button onClick={() => router.push("/sign-up")}>Sign in</button>{" "}
-  //     <button onClick={() => router.push("/sign-in")}>Sign Up</button>
-  //   </>
-  // );
+  const dispatch = useDispatch();
 
   return (
     <div className="flex px-[2rem] items-center fixed  justify-between h-[80px] w-full">
@@ -63,19 +44,20 @@ const Navbar = () => {
           <SheetTrigger>
             <Menu />
           </SheetTrigger>
-          <SheetContent side="left">
+          <SheetContent className="overflow-y-scroll" side="left">
             <SheetHeader>
-              <SheetTitle>List of Universities</SheetTitle>
-              <SheetDescription className="pt-10">
-                <NavbarItem />
-                <NavbarItem />
-                <NavbarItem />
-              </SheetDescription>
-              <SheetFooter>Blinko</SheetFooter>
+              <SheetTitle>test</SheetTitle>
+              {navigation &&
+                navigation.map((university, index) => (
+                  <NavbarItem {...university} key={index} />
+                ))}
             </SheetHeader>
+            <SheetFooter>Blinko</SheetFooter>
           </SheetContent>
         </Sheet>
-        <h2 className="pl-2">blinko</h2>
+        <Link href="/">
+          <h2 className="pl-2">blinko</h2>
+        </Link>
       </div>
       <div className="flex gap-8">
         <DropdownMenu>
@@ -98,13 +80,21 @@ const Navbar = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Avatar>
-          <AvatarImage src="https://avatars.githubusercontent.com/u/68058442?v=4" />
-          <AvatarFallback>B</AvatarFallback>
-        </Avatar>
-        <Button onClick={() => signOut()}>Sign Out</Button>
-        <Button onClick={() => router.push("/sign-in")}>Sign In</Button>
-        <Button onClick={() => router.push("/sign-up")}>Sign Up</Button>
+        {isAuthenticated ? (
+          <>
+            <Link href="/dashboard">Dashboard</Link>
+            <Button onClick={() => dispatch(setLogout())}>Sign Out</Button>
+            <Avatar>
+              <AvatarImage src="https://avatars.githubusercontent.com/u/68058442?v=4" />
+              <AvatarFallback>B</AvatarFallback>
+            </Avatar>
+          </>
+        ) : (
+          <>
+            <Button onClick={() => router.push("/sign-in")}>Sign In</Button>
+            <Button onClick={() => router.push("/sign-up")}>Sign Up</Button>
+          </>
+        )}
       </div>
     </div>
   );

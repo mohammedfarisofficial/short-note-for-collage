@@ -12,40 +12,41 @@ import { redirect, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const Subjects = () => {
-  const [subjects, setSubjects] = useState(null);
-  const { courseId, streamId, semesterId } = useParams();
+const Notes = () => {
+  const [notes, setNotes] = useState(null);
+  const { courseId, streamId, semesterId, subjectId } = useParams();
   const {
     streams,
     courses,
     semesters,
-    subjects: subjectsState,
+    subjects,
+    notes: notesState,
   } = useSelector((state) => state.data.universities);
 
   const setupStreams = async () => {
     try {
-      console.log(courseId, streamId, semesterId);
+      console.log(courseId, streamId, semesterId, subjectId);
 
-      const getBySlug = semesters.filter(
-        (semester) => semester?.slug === semesterId
+      const getBySlug = subjects.filter(
+        (subject) => subject?.slug === subjectId
       )[0];
       console.log("ID", getBySlug);
 
-      const subjectslist = subjectsState.filter(
-        (subject) => subject.semester_id === getBySlug._id
+      const noteslist = notesState.filter(
+        (note) => note.subject_id === getBySlug._id
       );
-      console.log("ID", subjectslist);
-      if (subjectslist.length === 0) {
+      console.log("ID", noteslist);
+      if (noteslist.length === 0) {
         console.log("No subjects found!");
         return;
       }
-      setSubjects(subjectslist);
+      setNotes(noteslist);
     } catch (err) {
       console.log(err);
     }
   };
   useEffect(() => {
-    if (!courseId && !streamId && !semesterId) {
+    if (!courseId && !streamId && !semesterId && !subjectId) {
       redirect("/");
     }
     setupStreams();
@@ -56,17 +57,17 @@ const Subjects = () => {
       <Link href="/streams/courseId/semesters/streamsId">Semester</Link>
       <div>
         <Card className="mt-2">
-          <h2 className="py-4 px-10">Stream ID : {semesterId}</h2>
+          <h2 className="py-4 px-10">Stream ID : {subjectId}</h2>
         </Card>
 
-        {subjects &&
-          subjects.map((sub, index) => (
+        {notes &&
+          notes.map((note, index) => (
             <Link
               key={index}
-              href={`/streams/${courseId}/semesters/${streamId}/subjects/${semesterId}/notes/${sub.slug}`}
+              href={`/streams/${courseId}/semesters/${streamId}/subjects/${semesterId}/notes/${subjectId}/${note.slug}`}
             >
               <Card className="mt-2">
-                <h2 className="py-4 px-10">{sub.title}</h2>
+                <h2 className="py-4 px-10">{note.name}</h2>
               </Card>
             </Link>
           ))}
@@ -75,4 +76,4 @@ const Subjects = () => {
   );
 };
 
-export default Subjects;
+export default Notes;

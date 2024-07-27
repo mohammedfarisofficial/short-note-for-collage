@@ -7,8 +7,6 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import { getServerSession } from "next-auth";
 import SessionProvider from "./auth/SessionProvider";
 
-const inter = Inter({ subsets: ["latin"] });
-
 import Navbar from "@/components/navbar/navbar";
 import ReduxProvider from "./store/provider/ReduxProvider";
 
@@ -16,9 +14,9 @@ export default async function RootLayout({ children }) {
   const session = await getServerSession();
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ReduxProvider>
-          <SessionProvider session={session}>
+      <body>
+        <SessionProvider session={session}>
+          <ReduxProvider>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -28,8 +26,8 @@ export default async function RootLayout({ children }) {
               <Navbar />
               {children}
             </ThemeProvider>
-          </SessionProvider>
-        </ReduxProvider>
+          </ReduxProvider>
+        </SessionProvider>
       </body>
     </html>
   );

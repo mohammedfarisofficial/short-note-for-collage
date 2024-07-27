@@ -4,6 +4,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import { persistor, store } from "../store";
 
+
 const ReduxProvider = ({ children }) => {
   return (
     <Provider store={store}>

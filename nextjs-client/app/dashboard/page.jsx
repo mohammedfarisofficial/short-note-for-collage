@@ -1,14 +1,34 @@
 "use client";
 import Link from "next/link";
 import protectedRoute from "../auth/protectedRoute";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
   return (
-    <>
-      <div>Dashboard</div>
-      <Link href="dashboard/update/123">Update note</Link>
-      <Link href="dashboard/upload">Upload note</Link>
-    </>
+    <div className="w-full h-[100vh] flex items-center justify-center flex-col">
+      <h2>List of notes</h2>
+      <Link href="/dashboard/upload">
+      <Button>Upload New</Button>
+      </Link>
+      <div>
+        <Card className="mt-2">
+          <h2 className="py-4 px-10">Note 1</h2>
+        </Card>
+        <Card className="mt-2">
+          <h2 className="py-4 px-10">Note 1</h2>
+        </Card>
+        <Card className="mt-2">
+          <h2 className="py-4 px-10">Note 1</h2>
+        </Card>
+        <Card className="mt-2">
+          <h2 className="py-4 px-10">Note 1</h2>
+        </Card>
+        <Card className="mt-2">
+          <h2 className="py-4 px-10">Note 1</h2>
+        </Card>
+      </div>
+    </div>
   );
 };
 

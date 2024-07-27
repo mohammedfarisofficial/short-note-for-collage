@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import * as pdfjsLib from "pdfjs-dist";
 // import "pdfjs-dist/web/pdf_viewer.css";
 
 import { pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+pdfjs.GlobalWorkerOptions.workerSrc =
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
 
 // pdfjs.GlobalWorkerOptions.workerSrc="https://unpkg.com/pdfjs-dist@4.4.168/legacy/build/pdf.worker.min.mjs"
 
@@ -19,6 +20,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import DropBox from "@/components/ui/drop-box";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setNavigation } from "./store/reducers/uiSlice";
+import { setUniversities } from "./store/reducers/dataSlice";
 
 const Home = () => {
   const [bits, setBits] = useState([{ title: "", content: "" }]);
@@ -27,9 +32,39 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState("");
 
+  const dispatch = useDispatch();
+
   const updateProgress = (message) => {
     setProgress(message);
   };
+
+  const fetchNavdata = async () => {
+    try {
+      const response = await axios.get("api/navigation");
+      console.log("navigation res", response);
+      if (response.status === 200) {
+        dispatch(setNavigation(response.data));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const fetchUniveristiesData = async () => {
+    try {
+      const response = await axios.get("api/universities");
+      console.log("universities res", response);
+      if (response.status === 200) {
+        dispatch(setUniversities(response.data));
+        // dispatch(setNavigation(response.data));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchNavdata();
+    fetchUniveristiesData();
+  }, []);
 
   const generatePDF = async () => {
     // ReactGA.event({

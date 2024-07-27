@@ -83,7 +83,7 @@ const SignIn = () => {
             <Button className="m-2" type="submit">
               Sign Up
             </Button>
-            <Button className="m-2" type="submit">
+            <Button onClick={()=>signIn("google")} className="m-2" type="submit">
               Google
             </Button>
             <Button className="m-2" onClick={()=>signIn("github")}>
