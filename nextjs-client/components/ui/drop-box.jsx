@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import {File, FileUp, CircleX } from "lucide-react";
+import { File, FileUp, CircleX } from "lucide-react";
 
 const DropFile = ({ file, setFile }) => {
   const handleFileChange = (event) => {
@@ -18,7 +18,7 @@ const DropFile = ({ file, setFile }) => {
   return (
     <div
       className={`w-[90%] h-[130px] my-5 dark:bg-[#1d1e24] bg-[#fff] rounded-lg flex justify-center items-center relative flex-col border border-dashed border-[#E1D1FA24] transition-all duration-200 ${
-        file ? "bg-[#892eff26] hover:bg-[#892eff26]" : "hover:bg-[#161619]"
+        file && "bg-[#892eff26]"
       }`}
     >
       {file ? (
@@ -37,8 +37,9 @@ const DropFile = ({ file, setFile }) => {
         <>
           <FileUp />
           <p className="text-xs mt-2 text-[#66676b]">
-            Drag & Drop or <span className="text-white dark:text-white">Choose file </span>
-             to upload
+            Drag & Drop or{" "}
+            <span className="dark:text-white text-black">Choose file </span>
+            to upload
           </p>
           <p className="text-xs text-[#66676b]">Maximum size: 25MB</p>
           <input
