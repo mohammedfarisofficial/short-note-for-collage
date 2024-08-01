@@ -1,8 +1,15 @@
 "use client";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-
+import axios from "axios";
+//firebase
+import { storage } from "@/firebase";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+// ui
+import { useToast } from "@/components/ui/use-toast";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -15,33 +22,30 @@ import {
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import DropFile from "@/components/ui/drop-box";
-//firebase
-import { storage } from "@/firebase";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { useToast } from "@/components/ui/use-toast";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { useSession } from "next-auth/react";
-import axios from "axios";
+
+const emptyNote = {
+  university_id: "",
+  course_id: "",
+  stream_id: "",
+  semester_id: "",
+  subject_id: "",
+
+  name: "",
+  createdBy: "",
+  downloadURL: "",
+};
 
 const Upload = () => {
   const [note, setNote] = useState(null);
   const [progress, setProgress] = useState(0);
+
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
   const { toast } = useToast();
   const session = useSession();
 
-  const [newNote, setNewNote] = useState({
-    //ref
-    university_id: "",
-    course_id: "",
-    stream_id: "",
-    semester_id: "",
-    subject_id: "",
-    // note data
-    name: "",
-    createdBy: "",
-    downloadURL: "",
-  });
+  const [newNote, setNewNote] = useState(emptyNote);
   const { universities, courses, streams, semesters, subjects } = useSelector(
     (state) => state.data.universities
   );
@@ -53,11 +57,22 @@ const Upload = () => {
     }));
   };
   const uploadNote = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.post("/api/note", newNote);
       console.log(response);
+      if (response.status === 201) {
+        setNewNote(emptyNote);
+        setNote(null);
+        setProgress(0);
+        toast({
+          title: "Note Uploaded",
+        });
+      }
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -82,10 +97,6 @@ const Upload = () => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log("download URL", downloadURL);
-          toast({
-            title: "PDF upload done",
-            description: "file upload to cloud",
-          });
           setNewNote((prev) => ({
             ...prev,
             downloadURL,
@@ -117,10 +128,16 @@ const Upload = () => {
     }));
   }, [session]);
 
-  console.log(newNote);
+  useEffect(() => {
+    const areAllFieldsFilled = Object.values(newNote).every(
+      (value) => value !== ""
+    );
+
+    setIsDisabled(!areAllFieldsFilled);
+  }, [newNote]);
 
   return (
-    <div className="w-full h-min-[110vh] flex items-center justify-start pt-[20vh] flex-col">
+    <div className="w-full h-min-[110vh] flex items-center justify-start flex-col">
       <h2 className="mb-5">Upload a Note</h2>
       <Card className="flex gap-y-2 flex-col p-5">
         <Select onValueChange={(value) => onSelectHanlder(value, "university")}>
@@ -147,13 +164,17 @@ const Upload = () => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Select University</SelectLabel>
-                {universities &&
-                  courses &&
-                  courses.map((course, index) => (
-                    <SelectItem key={index} value={course}>
-                      {course.title}
-                    </SelectItem>
-                  ))}
+                {courses.length &&
+                  courses
+                    .filter(
+                      (course) =>
+                        course?.university_id === newNote?.university_id
+                    )
+                    .map((course, index) => (
+                      <SelectItem key={index} value={course}>
+                        {course.title}
+                      </SelectItem>
+                    ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -166,12 +187,16 @@ const Upload = () => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Select University</SelectLabel>
-                {streams &&
-                  streams.map((stream, index) => (
-                    <SelectItem key={index} value={stream}>
-                      {stream.title}
-                    </SelectItem>
-                  ))}
+                {streams.length &&
+                  streams
+                    .filter(
+                      (stream) => stream?.course_id === newNote?.course_id
+                    )
+                    .map((stream, index) => (
+                      <SelectItem key={index} value={stream}>
+                        {stream?.title}
+                      </SelectItem>
+                    ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -184,12 +209,16 @@ const Upload = () => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Select University</SelectLabel>
-                {semesters &&
-                  semesters.map((semester, index) => (
-                    <SelectItem key={index} value={semester}>
-                      {semester.title}
-                    </SelectItem>
-                  ))}
+                {semesters?.length &&
+                  semesters
+                    .filter(
+                      (semester) => semester?.stream_id === newNote?.stream_id
+                    )
+                    .map((semester, index) => (
+                      <SelectItem key={index} value={semester}>
+                        {semester?.title}
+                      </SelectItem>
+                    ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -202,18 +231,22 @@ const Upload = () => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Select University</SelectLabel>
-                {subjects &&
-                  subjects.map((subject, index) => (
-                    <SelectItem key={index} value={subject}>
-                      {subject.title}
-                    </SelectItem>
-                  ))}
+                {subjects.length &&
+                  subjects
+                    .filter(
+                      (subject) => subject?.semester_id === newNote?.semester_id
+                    )
+                    .map((subject, index) => (
+                      <SelectItem key={index} value={subject}>
+                        {subject?.title}
+                      </SelectItem>
+                    ))}
               </SelectGroup>
             </SelectContent>
           </Select>
         )}
 
-        <DropFile file={note} setFile={setNote} />
+        <DropFile uploadProgress={progress} file={note} setFile={setNote} />
         <Label htmlFor="name">Name</Label>
         <Input
           placeholder="example.pdf"
@@ -228,9 +261,13 @@ const Upload = () => {
             }));
           }}
         />
-        <p>progress : {progress.toString()}%</p>
-
-        <Button onClick={uploadNote}>Upload</Button>
+        <Button
+          isLoading={isLoading}
+          isDisabled={isDisabled}
+          onClick={uploadNote}
+        >
+          Upload
+        </Button>
       </Card>
     </div>
   );

@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
   return (
-    <div className="w-full h-[100vh] flex items-center justify-center flex-col">
+    <div className="w-full h-[100vh] flex items-center flex-col">
       <h2>List of notes</h2>
-      <Link href="/dashboard/upload">
+      <Link href="/dashboard/upload-note">
       <Button>Upload New</Button>
       </Link>
       <div>

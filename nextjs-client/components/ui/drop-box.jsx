@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { File, FileUp, CircleX } from "lucide-react";
 
-const DropFile = ({ file, setFile }) => {
+const DropFile = ({ file, setFile, uploadProgress }) => {
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
@@ -30,8 +30,15 @@ const DropFile = ({ file, setFile }) => {
             <CircleX />
           </div>
           <File />
-          <p>{file?.name}</p>
-          <p>Size: {(file?.size / 1024).toFixed(2)}KB</p>
+          <p className="text-[12px]">{file?.name}</p>
+          {uploadProgress && uploadProgress === 100 ? (
+            <p className="text-[15px]">Uploaded</p>
+          ) : (
+            <p className="text-[15px]">{uploadProgress}%</p>
+          )}
+          <p className="text-[12px]">
+            Size: {(file?.size / 1024).toFixed(2)}KB
+          </p>
         </>
       ) : (
         <>
