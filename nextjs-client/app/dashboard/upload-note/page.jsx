@@ -117,7 +117,7 @@ const Upload = () => {
   }, [note]);
 
   useEffect(() => {
-    console.log(session.status);
+    console.log(session);
     if (session.status !== "authenticated") {
       return;
     }
