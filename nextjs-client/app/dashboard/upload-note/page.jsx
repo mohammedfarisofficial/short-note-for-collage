@@ -38,7 +38,7 @@ const Upload = () => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { data: session, status } = useSession();
+  const session = useSession();
   const [newNote, setNewNote] = useState(emptyNote);
   const { universities, courses, streams, semesters, subjects } = useSelector(
     (state) => state.data.universities
@@ -106,15 +106,20 @@ const Upload = () => {
   }, [note]);
 
   useEffect(() => {
-    if (status !== "authenticated") return;
+    console.log("session data",session)
+    if (session.status !== "authenticated") {
+      return;
+    }
     setNewNote((prev) => ({
       ...prev,
-      createdBy: session.user._id,
+      createdBy: session.data?.user._id,
     }));
-  }, [session, status]);
+  }, [session]);
 
   useEffect(() => {
-    const areAllFieldsFilled = Object.values(newNote).every((value) => value !== "");
+    const areAllFieldsFilled = Object.values(newNote).every(
+      (value) => value !== ""
+    );
     setIsDisabled(!areAllFieldsFilled);
   }, [newNote]);
 
@@ -146,7 +151,9 @@ const Upload = () => {
               <SelectGroup>
                 <SelectLabel>Select Course</SelectLabel>
                 {courses
-                  .filter((course) => course.university_id === newNote.university_id)
+                  .filter(
+                    (course) => course.university_id === newNote.university_id
+                  )
                   .map((course, index) => (
                     <SelectItem key={index} value={course}>
                       {course.title}
@@ -184,7 +191,9 @@ const Upload = () => {
               <SelectGroup>
                 <SelectLabel>Select Semester</SelectLabel>
                 {semesters
-                  .filter((semester) => semester.stream_id === newNote.stream_id)
+                  .filter(
+                    (semester) => semester.stream_id === newNote.stream_id
+                  )
                   .map((semester, index) => (
                     <SelectItem key={index} value={semester}>
                       {semester.title}
@@ -203,7 +212,9 @@ const Upload = () => {
               <SelectGroup>
                 <SelectLabel>Select Subject</SelectLabel>
                 {subjects
-                  .filter((subject) => subject.semester_id === newNote.semester_id)
+                  .filter(
+                    (subject) => subject.semester_id === newNote.semester_id
+                  )
                   .map((subject, index) => (
                     <SelectItem key={index} value={subject}>
                       {subject.title}
@@ -227,7 +238,11 @@ const Upload = () => {
             }));
           }}
         />
-        <Button isLoading={isLoading} isDisabled={isDisabled} onClick={uploadNote}>
+        <Button
+          isLoading={isLoading}
+          isDisabled={isDisabled}
+          onClick={uploadNote}
+        >
           Upload
         </Button>
       </Card>
