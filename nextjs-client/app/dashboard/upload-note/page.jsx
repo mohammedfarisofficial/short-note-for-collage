@@ -57,6 +57,7 @@ const Upload = () => {
     }));
   };
   const uploadNote = async () => {
+    console.log("formData",newNote)
     setIsLoading(true);
     try {
       const response = await axios.post("/api/note", newNote);
