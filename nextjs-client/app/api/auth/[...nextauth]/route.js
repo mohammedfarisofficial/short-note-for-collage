@@ -17,23 +17,12 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        try {
-          await connect();
-
-          const user = await User.findOne({ email: credentials.email });
-          if (!user) {
-            throw new Error("User not exist!");
-          }
-          const isCorrectPassword = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
-          if (isCorrectPassword) {
-            return user;
-          }
-        } catch (err) {
-          console.log(err);
-        }
+        await connect();
+        const user = await User.findOne({ email: credentials.email });
+        if (!user) throw new Error("User not exist!");
+        const correctPassword = await bcrypt.compare(credentials.password, user.password);
+        if (correctPassword) return user;
+        throw new Error("Incorrect password");
       },
     }),
     GithubProvider({
@@ -46,72 +35,22 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
-      if (account?.provider === "credentials") {
-        return true;
-      }
-
-      if (account?.provider === "github") {
-        try {
-          await connect();
-          console.log("GitHub user:", user);
-
-          const existingUser = await User.findOne({ email: user.email });
-          if (!existingUser) {
-            const newUser = new User({
-              email: user.email,
-              username: user.name,
-              imageUrl: user?.image,
-            });
-            await newUser.save();
-            console.log("New GitHub user created:", newUser);
-          } else {
-            console.log("Existing GitHub user:", existingUser);
-          }
-          return true;
-        } catch (err) {
-          console.log("Error saving user", err);
-          return false;
-        }
-      }
-      if (account?.provider === "google") {
-        try {
-          await connect();
-          console.log("Google user:", user);
-          const existingUser = await User.findOne({ email: user.email });
-          if (!existingUser) {
-            const newUser = new User({
-              email: user.email,
-              username: user.name,
-              imageUrl: user?.image,
-            });
-            await newUser.save();
-            console.log("New Google user created:", newUser);
-          } else {
-            console.log("Existing Google user:", existingUser);
-          }
-          return true;
-        } catch (err) {
-          console.log("Error saving user", err);
-          return false;
-        }
-      }
-    },
     async jwt({ token, user }) {
       if (user) {
-        token.user = user;
+        token.user = {
+          _id: user._id,
+          email: user.email,
+          name: user.name,
+          image: user.image,
+        };
       }
       return token;
     },
     async session({ session, token }) {
       if (token.user) {
-        delete token.user.password;
         session.user = token.user;
       }
       return session;
-    },
-    async redirect({ url, baseUrl }) {
-      return baseUrl;
     },
   },
 };
