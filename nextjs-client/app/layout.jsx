@@ -8,12 +8,13 @@ import { Toaster } from "@/components/ui/toaster";
 // next auth
 import { getServerSession } from "next-auth";
 import SessionProvider from "./auth/SessionProvider";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 import Navbar from "@/components/navbar/navbar";
 import ReduxProvider from "./store/provider/ReduxProvider";
 
 export default async function RootLayout({ children }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body>

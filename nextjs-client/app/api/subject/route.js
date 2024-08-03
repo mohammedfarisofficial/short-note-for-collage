@@ -43,6 +43,7 @@ export const POST = async (request) => {
 
 export const GET = async () => {
   try {
+    await connect();
     const subjects = await Subject.find();
     if (!subjects) {
       return new NextResponse("Subjects not found!", { status: 404 });

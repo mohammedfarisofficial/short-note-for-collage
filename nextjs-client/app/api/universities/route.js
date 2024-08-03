@@ -7,9 +7,14 @@ import Semester from "@/modals/Semester";
 import Subject from "@/modals/Subject";
 import Note from "@/modals/Note";
 
+import connect from "@/utils/db";
+
+export const dynamic = "force-dynamic";
+
+
 export const GET = async () => {
-  console.log("trigger");
   try {
+    await connect();
     const universities = await University.find();
     const courses = await Course.find();
     const streams = await Stream.find();

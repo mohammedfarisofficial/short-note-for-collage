@@ -41,6 +41,7 @@ export const POST = async (request) => {
 
 export const GET = async () => {
   try {
+    await connect();
     const semesters = await Semester.find();
     if (!semesters) {
       return new NextResponse("Semesters not found!", { status: 404 });

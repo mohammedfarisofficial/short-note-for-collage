@@ -9,8 +9,11 @@ const dataSlice = createSlice({
     setUniversities: (state, action) => {
       state.universities = action.payload;
     },
+    setNote: (state, action) => {
+      state.universities.notes.push(action.payload);
+    },
   },
 });
 
-export const { setUniversities } = dataSlice.actions;
+export const { setUniversities, setNote } = dataSlice.actions;
 export default dataSlice.reducer;

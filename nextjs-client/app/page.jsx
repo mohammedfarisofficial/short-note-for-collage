@@ -41,7 +41,6 @@ const Home = () => {
   const fetchNavdata = async () => {
     try {
       const response = await axios.get("api/navigation");
-      console.log("navigation res", response);
       if (response.status === 200) {
         dispatch(setNavigation(response.data));
       }
@@ -64,7 +63,7 @@ const Home = () => {
   useEffect(() => {
     fetchNavdata();
     fetchUniveristiesData();
-  }, []);
+  }, [fetchNavdata,fetchUniveristiesData]);
 
   const generatePDF = async () => {
     // ReactGA.event({

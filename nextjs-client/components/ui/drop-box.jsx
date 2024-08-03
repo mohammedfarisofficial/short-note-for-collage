@@ -11,10 +11,6 @@ const DropFile = ({ file, setFile, uploadProgress }) => {
     setFile(null);
   };
 
-  useEffect(() => {
-    console.log(file);
-  }, [file]);
-
   return (
     <div
       className={`w-[90%] h-[130px] my-5 dark:bg-[#1d1e24] bg-[#fff] rounded-lg flex justify-center items-center relative flex-col border border-dashed border-[#E1D1FA24] transition-all duration-200 ${

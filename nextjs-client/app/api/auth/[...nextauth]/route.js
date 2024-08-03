@@ -18,11 +18,19 @@ export const authOptions = {
       },
       async authorize(credentials) {
         await connect();
-        const user = await User.findOne({ email: credentials.email });
+        const user = await User.findOne({ email: credentials.email }).select(
+          "_id email username image password"
+        );
         if (!user) throw new Error("User not exist!");
-        const correctPassword = await bcrypt.compare(credentials.password, user.password);
-        if (correctPassword) return user;
-        throw new Error("Incorrect password");
+
+        const correctPassword = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+        if (!correctPassword) throw new Error("Incorrect password");
+
+        console.log("**User found during login attempt:**", user);
+        return user;
       },
     }),
     GithubProvider({
@@ -34,22 +42,27 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.user = {
-          _id: user._id,
-          email: user.email,
-          name: user.name,
-          image: user.image,
-        };
+        token.id = user._id.toString();
+        token.email = user.email;
+        token.username = user.username;
+        token.image = user?.image;
       }
+      console.log("**JWT token generated:**", token);
       return token;
     },
     async session({ session, token }) {
-      if (token.user) {
-        session.user = token.user;
-      }
+      session.user.id = token.id;
+      session.user.username = token.username;
+      session.user.name = token.username;
+      session.user.email = token.email;
+      session.user.image = token.image || "";
+      console.log("**Session data updated:**", session);
       return session;
     },
   },

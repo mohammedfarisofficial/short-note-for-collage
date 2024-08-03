@@ -1,5 +1,5 @@
 "use client";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { storage } from "@/firebase";
@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import DropFile from "@/components/ui/drop-box";
+import { setNote as setLocalNote } from "@/app/store/reducers/dataSlice"
 
 const emptyNote = {
   university_id: "",
@@ -44,6 +45,7 @@ const Upload = () => {
     (state) => state.data.universities
   );
 
+  const dispatch = useDispatch()
   const onSelectHanlder = (value, type) => {
     setNewNote((prev) => ({
       ...prev,
@@ -56,6 +58,7 @@ const Upload = () => {
     try {
       const response = await axios.post("/api/note", newNote);
       if (response.status === 201) {
+        dispatch(setLocalNote(response.data))
         setNewNote(emptyNote);
         setNote(null);
         setProgress(0);
@@ -106,13 +109,13 @@ const Upload = () => {
   }, [note]);
 
   useEffect(() => {
-    console.log("session data",session)
+    console.log("session data", session);
     if (session.status !== "authenticated") {
       return;
     }
     setNewNote((prev) => ({
       ...prev,
-      createdBy: session.data?.user._id,
+      createdBy: session.data?.user.id,
     }));
   }, [session]);
 
@@ -125,7 +128,7 @@ const Upload = () => {
 
   return (
     <div className="w-full h-min-[110vh] flex items-center justify-start flex-col">
-      <h2 className="mb-5">Upload a Note</h2>
+      <h2 className="mb-5">Upload a Note{session?.data?.user.id}</h2>
       <Card className="flex gap-y-2 flex-col p-5">
         <Select onValueChange={(value) => onSelectHanlder(value, "university")}>
           <SelectTrigger className="w-[280px]">

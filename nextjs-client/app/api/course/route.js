@@ -32,6 +32,7 @@ export const POST = async (request) => {
 
 export const GET = async () => {
   try {
+    await connect();
     const courses = await Course.find();
     if (!courses) {
       return new NextResponse("Courses not found!", { status: 404 });

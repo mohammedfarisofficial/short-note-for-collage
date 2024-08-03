@@ -35,6 +35,7 @@ export const POST = async (request) => {
 
 export const GET = async () => {
   try {
+    await connect();
     const streams = await Stream.find();
     if (!streams) {
       return new NextResponse("Streams not found!", { status: 404 });

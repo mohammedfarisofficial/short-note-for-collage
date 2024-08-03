@@ -28,14 +28,15 @@ const SignIn = () => {
 
   const signInHandler = async (e) => {
     e.preventDefault();
-    console.log("Credentials :", loginCredential);
     try {
+      console.log("trigger")
       const response = await signIn("credentials", {
         redirect: false,
         email: loginCredential.email,
         password: loginCredential.password,
       });
-      
+      console.log("trigger 1")
+      console.log("login response", response);
       if (response.status === 200) {
         dispatch(setAuth({ user: loginCredential }));
         router.push("/");
@@ -83,10 +84,14 @@ const SignIn = () => {
             <Button className="m-2" type="submit">
               Sign Up
             </Button>
-            <Button onClick={()=>signIn("google")} className="m-2" type="submit">
+            <Button
+              onClick={() => signIn("google")}
+              className="m-2"
+              type="submit"
+            >
               Google
             </Button>
-            <Button className="m-2" onClick={()=>signIn("github")}>
+            <Button className="m-2" onClick={() => signIn("github")}>
               Github
             </Button>
           </CardFooter>

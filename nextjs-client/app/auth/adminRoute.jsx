@@ -16,7 +16,7 @@ const projectedRoute = (Component) => {
         redirect("/");
         return null;
       }
-    }, [isAuthenticated]);
+    }, [isAuthenticated,isAdmin]);
 
     return <Component {...props} />;
   };
