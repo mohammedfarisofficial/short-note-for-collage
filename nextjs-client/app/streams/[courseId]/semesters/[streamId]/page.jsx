@@ -51,16 +51,13 @@ const Semester = () => {
   }, []);
 
   return (
-    <div className="w-full h-[100vh] flex items-center justify-center flex-col">
-      <Link href="/streams/courseId/semesters/streamsId">Semester</Link>
-      <div>
-        <Link href={`/streams/${courseId}/semesters/${courseId}`}>
-          <Card className="mt-2">
-            <h2 className="py-4 px-10">Stream ID : {streamId}</h2>
-          </Card>
-        </Link>
-
+    <div className="w-full h-[100vh] flex items-center flex-col">
+      <h2 className="scroll-m-20 text-l font-semibold tracking-tight">
+        Select your Semester
+      </h2>
+      <div className="w-full">
         {semesters &&
+          semesters.length &&
           semesters.map((sem, index) => (
             <Link
               key={index}

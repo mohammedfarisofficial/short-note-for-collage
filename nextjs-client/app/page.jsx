@@ -2,13 +2,14 @@
 import { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import * as pdfjsLib from "pdfjs-dist";
-// import "pdfjs-dist/web/pdf_viewer.css";
+import "pdfjs-dist/web/pdf_viewer.css";
 
 import { pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+// pdfjs.GlobalWorkerOptions.workerSrc =
+//   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
 
 // pdfjs.GlobalWorkerOptions.workerSrc="https://unpkg.com/pdfjs-dist@4.4.168/legacy/build/pdf.worker.min.mjs"
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
 
 import { Button } from "@/components/ui/button";
 import {

@@ -52,14 +52,13 @@ const Subjects = () => {
   }, []);
 
   return (
-    <div className="w-full h-[100vh] flex items-center justify-center flex-col">
-      <Link href="/streams/courseId/semesters/streamsId">Semester</Link>
-      <div>
-        <Card className="mt-2">
-          <h2 className="py-4 px-10">Stream ID : {semesterId}</h2>
-        </Card>
-
+    <div className="w-full h-[100vh] flex items-center flex-col">
+      <h2 className="scroll-m-20 text-l font-semibold tracking-tight">
+        Select your Subject
+      </h2>
+      <div className="w-full">
         {subjects &&
+          subjects.length &&
           subjects.map((sub, index) => (
             <Link
               key={index}

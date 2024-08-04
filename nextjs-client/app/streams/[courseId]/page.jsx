@@ -1,10 +1,11 @@
 "use client";
-import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { redirect } from "next/navigation";
+
+import { Card } from "@/components/ui/card";
 
 const Streams = () => {
   const [streams, setStreams] = useState(null);
@@ -37,21 +38,22 @@ const Streams = () => {
     }
     setupStreams();
   }, []);
-  return (
-    <div className="w-full h-[100vh] flex items-center justify-center flex-col">
-      <Link href="/streams/courseId/semesters/streamsId">Streams</Link>
-      <div>
-        <Link href={`/streams/${courseId}/semesters/${courseId}`}>
-          <Card className="mt-2">
-            <h2 className="py-4 px-10">Course ID : {courseId}</h2>
-          </Card>
-        </Link>
 
+  return (
+    <div className="w-full h-[100vh] flex items-center flex-col">
+      <h2 className="scroll-m-20 text-l font-semibold tracking-tight">
+        Select your stream
+      </h2>
+      <div className="w-full">
         {streams &&
+          streams.length &&
           streams.map((stream, index) => (
-            <Link key={index} href={`/streams/${courseId}/semesters/${stream.slug}`}>
-              <Card  className="mt-2">
-                <h2 className="py-4 px-10">Streams : {stream.title}</h2>
+            <Link
+              key={index}
+              href={`/streams/${courseId}/semesters/${stream.slug}`}
+            >
+              <Card className="mt-2">
+                <h2 className="py-4 px-10">{stream.title}</h2>
               </Card>
             </Link>
           ))}

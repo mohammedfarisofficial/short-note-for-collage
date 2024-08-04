@@ -53,14 +53,33 @@ const Notes = () => {
   }, []);
 
   return (
-    <div className="w-full h-[100vh] flex items-center justify-center flex-col">
-      <Link href="/streams/courseId/semesters/streamsId">Semester</Link>
-      <div>
-        <Card className="mt-2">
-          <h2 className="py-4 px-10">Stream ID : {subjectId}</h2>
-        </Card>
+    // <div className="w-full h-[100vh] flex items-center justify-center flex-col">
+    //   <Link href="/streams/courseId/semesters/streamsId">Semester</Link>
+    //   <div>
+    //     <Card className="mt-2">
+    //       <h2 className="py-4 px-10">Stream ID : {subjectId}</h2>
+    //     </Card>
 
+    //     {notes &&
+    //       notes.map((note, index) => (
+    //         <Link
+    //           key={index}
+    //           href={`/streams/${courseId}/semesters/${streamId}/subjects/${semesterId}/notes/${subjectId}/${note.slug}`}
+    //         >
+    //           <Card className="mt-2">
+    //             <h2 className="py-4 px-10">{note.name}</h2>
+    //           </Card>
+    //         </Link>
+    //       ))}
+    //   </div>
+    // </div>
+    <div className="w-full h-[100vh] flex items-center flex-col">
+      <h2 className="scroll-m-20 text-l font-semibold tracking-tight">
+        List of Notes
+      </h2>
+      <div className="w-full">
         {notes &&
+          notes.length &&
           notes.map((note, index) => (
             <Link
               key={index}
