@@ -67,3 +67,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+.rpv-core__inner-page {
+  background-color: var(--foreground) !important;
+}
+.rpv-core__doc-error {
+  background-color: blue !important;
+}
+.rpv-core__doc-error-text {
+  background-color: green !important;
+  overflow: hidden;
+  font-size: 10px;
+}
+.rpv-core__doc-loading{
+  background-color: transparent !important; 
+}

@@ -1,6 +1,6 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import axios from "axios";
 import { storage } from "@/firebase";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import DropFile from "@/components/ui/drop-box";
-import { setNote as setLocalNote } from "@/app/store/reducers/dataSlice"
+import { setNote as setLocalNote } from "@/app/store/reducers/dataSlice";
 
 const emptyNote = {
   university_id: "",
@@ -45,7 +45,7 @@ const Upload = () => {
     (state) => state.data.universities
   );
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const onSelectHanlder = (value, type) => {
     setNewNote((prev) => ({
       ...prev,
@@ -58,7 +58,7 @@ const Upload = () => {
     try {
       const response = await axios.post("/api/note", newNote);
       if (response.status === 201) {
-        dispatch(setLocalNote(response.data))
+        dispatch(setLocalNote(response.data));
         setNewNote(emptyNote);
         setNote(null);
         setProgress(0);

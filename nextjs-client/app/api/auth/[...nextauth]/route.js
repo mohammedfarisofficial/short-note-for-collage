@@ -65,6 +65,9 @@ export const authOptions = {
       console.log("**Session data updated:**", session);
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      return url.startsWith(baseUrl) ? url : baseUrl;
+    },
   },
 };
 
